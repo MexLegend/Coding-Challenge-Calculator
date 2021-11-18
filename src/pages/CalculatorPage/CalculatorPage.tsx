@@ -1,4 +1,5 @@
-import { Grid, Paper, Slider } from "@mui/material";
+import { Container, Grid, Paper, Slider } from "@mui/material";
+
 import { styled } from '@mui/material/styles'
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux";
@@ -17,7 +18,7 @@ export const CalculatorPage = () => {
 
     const onCalculateCostFoodSavings = (monthlyIngredientSpending: number) => {
         console.log(monthlyIngredientSpending);
-        
+
         dispatch(calculateCostFoodSavings(monthlyIngredientSpending))
     }
 
@@ -36,7 +37,7 @@ export const CalculatorPage = () => {
     }));
 
     return (
-        <div className="container">
+        <Container maxWidth="lg">
             <Grid container spacing={2}>
                 <Grid item xs={6}>
                     <Item>
@@ -57,7 +58,7 @@ export const CalculatorPage = () => {
                         <Item>
                             <div className="input-group">
                                 <span className="input-group-text">$</span>
-                                <input type="text" className="form-control" aria-label="Dollar amount (with dot and two decimal places)" onChange={ (e) => onCalculateCostFoodSavings(Number(e.target.value)) } value={ costFoodSavingsValue } />
+                                <input type="text" className="form-control" aria-label="Dollar amount (with dot and two decimal places)" onChange={(e) => onCalculateCostFoodSavings(Number(e.target.value))} value={costFoodSavingsValue} />
                             </div>
                         </Item>
                     </Grid>
@@ -70,15 +71,15 @@ export const CalculatorPage = () => {
                     </Grid>
                 </Grid>
             </Grid>
-                        <Slider
-                                onChange={ (_, value) => onCalculateCostFoodSavings(value as number)}
-                                aria-label="Monthly"
-                                defaultValue={10}
-                                valueLabelDisplay="auto"
-                                step={1}
-                                min={10}
-                                max={100}
-                            />
+            <Slider
+                onChange={(_, value) => onCalculateCostFoodSavings(value as number)}
+                aria-label="Monthly"
+                defaultValue={10}
+                valueLabelDisplay="auto"
+                step={1}
+                min={10}
+                max={100}
+            />
             <div className="row">
                 <div className="col-md-6">
                 </div>
@@ -91,7 +92,7 @@ export const CalculatorPage = () => {
                     </div>
                     <div className="row">
                         <div className="col-md-12">
-                            
+
                         </div>
                     </div>
                     <div className="row">
@@ -108,7 +109,7 @@ export const CalculatorPage = () => {
                     <div className="row">
                         <div className="col-md-12">
                             <Slider
-                                onChange={ (_, value) => onCalculateAnnualSavings(value as number)}
+                                onChange={(_, value) => onCalculateAnnualSavings(value as number)}
                                 aria-label="Full-time"
                                 defaultValue={1}
                                 valueLabelDisplay="auto"
@@ -120,14 +121,14 @@ export const CalculatorPage = () => {
                     </div>
                     <div className="row">
                         <div className="col-md-4">
-                            ${ costFoodSavingsValue }
+                            ${costFoodSavingsValue}
                         </div>
                         <div className="col-md-8">
-                            ${ annualSavingsValue }
+                            ${annualSavingsValue}
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </Container>
     )
 }
