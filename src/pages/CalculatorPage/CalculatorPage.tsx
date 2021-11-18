@@ -1,31 +1,43 @@
-import { Grid, Paper, Slider } from "@mui/material";
+import { FormControl, Grid, Input, InputAdornment, Paper, Slider } from "@mui/material";
 import { styled } from '@mui/material/styles'
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux";
 
 import { AppState } from "../../interfaces/appIniterfaces";
-import { calculateAnnualSavings, calculateCostFoodSavings, infoStartLoading } from "../../redux/actions/calculatorAction";
+import { calculateAnnualSavings, calculateCostFoodSavings, fullTimeEmployesValue, infoStartLoading, monthlyIngredientSpendingValue } from "../../redux/actions/calculatorAction";
 
 export const CalculatorPage = () => {
 
     const dispatch = useDispatch();
-    const { annualSavingsValue, calculator, costFoodSavingsValue } = useSelector(({ CALCULATOR }: AppState) => CALCULATOR);
+    const { annualSavingsValue, calculator, costFoodSavingsValue, fullTimeEmployes, monthlyIngredientSpending } = useSelector(({ CALCULATOR }: AppState) => CALCULATOR);
 
     const onCalculateAnnualSavings = (fullTimeEmployes: number) => {
         dispatch(calculateAnnualSavings(fullTimeEmployes, costFoodSavingsValue));
     }
 
     const onCalculateCostFoodSavings = (monthlyIngredientSpending: number) => {
-        console.log(monthlyIngredientSpending);
+        dispatch(calculateCostFoodSavings(monthlyIngredientSpending));
+        onCalculateAnnualSavings(fullTimeEmployes);
+    }
+
+    const onChangeMonthlyIngredientSpending = ({ value }: EventTarget & (HTMLTextAreaElement | HTMLInputElement)) => {
+        console.log('Math.abs(Number(value))', Math.abs(Number(value)));
         
-        dispatch(calculateCostFoodSavings(monthlyIngredientSpending))
+        const valueNumber = Math.abs(Number(value)) < 10 ? 10 : Math.abs(Number(value));
+        dispatch(monthlyIngredientSpendingValue(valueNumber));
+        dispatch(calculateCostFoodSavings(valueNumber));
+        onCalculateAnnualSavings(fullTimeEmployes);
+    }
+
+    const onChangeFullTimeEmployes = ({ value }: EventTarget & (HTMLTextAreaElement | HTMLInputElement)) => {
+        const valueNumber = Math.abs(Number(value)) === 0 ? 1 : Math.abs(Number(value));
+        dispatch(fullTimeEmployesValue(valueNumber));
+        dispatch(calculateAnnualSavings(valueNumber, costFoodSavingsValue));
     }
 
     useEffect(() => {
         dispatch(infoStartLoading());
     }, [dispatch]);
-
-
 
     const Item = styled(Paper)(({ theme }) => ({
         ...theme.typography.body2,
@@ -40,8 +52,8 @@ export const CalculatorPage = () => {
             <Grid container spacing={2}>
                 <Grid item xs={6}>
                     <Item>
-                        <span>{calculator.title}</span>
-                        <span>{calculator.description}</span>
+                        <span>{ calculator.title }</span>
+                        <span>{ calculator.description }</span>
                     </Item>
                 </Grid>
                 <Grid container>
@@ -56,8 +68,16 @@ export const CalculatorPage = () => {
                     <Grid item xs={4}>
                         <Item>
                             <div className="input-group">
-                                <span className="input-group-text">$</span>
-                                <input type="text" className="form-control" aria-label="Dollar amount (with dot and two decimal places)" onChange={ (e) => onCalculateCostFoodSavings(Number(e.target.value)) } value={ costFoodSavingsValue } />
+
+                            <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+                                <Input
+                                    id="standard-adornment-amount"
+                                    inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+                                    onChange={ ({ target }) => onChangeMonthlyIngredientSpending(target) }
+                                    startAdornment={ <InputAdornment position="start">$</InputAdornment> }
+                                    value={ monthlyIngredientSpending }
+                                />
+                            </FormControl>
                             </div>
                         </Item>
                     </Grid>
@@ -71,13 +91,13 @@ export const CalculatorPage = () => {
                 </Grid>
             </Grid>
                         <Slider
-                                onChange={ (_, value) => onCalculateCostFoodSavings(value as number)}
                                 aria-label="Monthly"
-                                defaultValue={10}
-                                valueLabelDisplay="auto"
-                                step={1}
-                                min={10}
                                 max={100}
+                                min={10}
+                                onChange={ (_, value) => onCalculateCostFoodSavings(value as number) }
+                                step={1}
+                                value={ monthlyIngredientSpending }
+                                valueLabelDisplay="auto"
                             />
             <div className="row">
                 <div className="col-md-6">
@@ -102,28 +122,34 @@ export const CalculatorPage = () => {
                             </span>
                         </div>
                         <div className="col-md-2">
-                            <input type="text" className="form-control" />
+                            <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+                                <Input
+                                    id="standard-adornment-amount"
+                                    onChange={ ({ target }) => onChangeFullTimeEmployes(target) }
+                                    value={ fullTimeEmployes }
+                                />
+                            </FormControl>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-md-12">
                             <Slider
-                                onChange={ (_, value) => onCalculateAnnualSavings(value as number)}
                                 aria-label="Full-time"
-                                defaultValue={1}
-                                valueLabelDisplay="auto"
-                                step={1}
-                                min={1}
                                 max={10}
+                                min={1}
+                                onChange={ (_, value) => onCalculateAnnualSavings(value as number)}
+                                step={1}
+                                value={ fullTimeEmployes }
+                                valueLabelDisplay="auto"
                             />
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-md-4">
-                            ${ costFoodSavingsValue }
+                            ${ costFoodSavingsValue.toFixed(3) }
                         </div>
                         <div className="col-md-8">
-                            ${ annualSavingsValue }
+                            ${ annualSavingsValue.toFixed(3) }
                         </div>
                     </div>
                 </div>

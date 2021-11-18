@@ -13,6 +13,8 @@ export interface CalculatorState {
     annualSavingsValue: number;
     calculator: CalculatorInfo;
     costFoodSavingsValue: number;
+    fullTimeEmployes: number;
+    monthlyIngredientSpending: number;
 }
 
 export interface MenuItem {

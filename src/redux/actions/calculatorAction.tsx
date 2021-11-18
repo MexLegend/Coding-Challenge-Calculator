@@ -9,6 +9,30 @@ const annualSavingsValue = (value: number) => ({
     payload: value
 });
 
+const calculateAnnualSavings = (fullTimeEmployes: number, monthlyIngredientSpending: number) => {
+    return(dispatch: Dispatch) => {
+        dispatch(fullTimeEmployesValue(fullTimeEmployes));
+        dispatch(annualSavingsValue(((fullTimeEmployes * 1337) +  monthlyIngredientSpending)));
+    }
+}
+
+const calculateCostFoodSavings = (monthlyIngredientSpending: number) => {
+    return(dispatch: Dispatch) => {
+        dispatch(monthlyIngredientSpendingValue(monthlyIngredientSpending));
+        dispatch(costFoodSavingsValue(monthlyIngredientSpending * 0.3));
+    }
+}
+
+const costFoodSavingsValue = (value: number) => ({
+    type: Types.CALCULATOR_COST_FOOD_SAVINGS,
+    payload: value
+});
+
+const fullTimeEmployesValue = (value: number) => ({
+    type: Types.CALCULATOR_FULL_TIME_EMPLOYES,
+    payload: value
+});
+
 const infoLoaded = (data: CalculatorState) => ({
     type: Types.CALCULATOR_INFO_LOADED,
     payload: data
@@ -30,25 +54,15 @@ const infoStartLoading = () => {
     }
 }
 
-const calculateAnnualSavings = (fullTimeEmployes: number, monthlyIngredientSpending: number) => {
-    return(dispatch: Dispatch) => {
-        dispatch(annualSavingsValue(((fullTimeEmployes * 1337) +  monthlyIngredientSpending)));
-    }
-}
-
-const calculateCostFoodSavings = (monthlyIngredientSpending: number) => {
-    return(dispatch: Dispatch) => {
-        dispatch(costFoodSavingsValue(monthlyIngredientSpending * 0.3));
-    }
-}
-
-const costFoodSavingsValue = (value: number) => ({
-    type: Types.CALCULATOR_COST_FOOD_SAVINGS,
+const monthlyIngredientSpendingValue = (value: number) => ({
+    type: Types.CALCULATOR_MONTHLY_INGREDIENT_SPENDING,
     payload: value
 });
 
 export {
     calculateAnnualSavings,
     calculateCostFoodSavings,
-    infoStartLoading
+    fullTimeEmployesValue,
+    infoStartLoading,
+    monthlyIngredientSpendingValue
 }
