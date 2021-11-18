@@ -5,6 +5,7 @@ type TestimonialAction =
     | { type: Types.TESTIMONIAL_SLIDER_LOADED, payload: { slider: Slider } }
 
 const initialState: TestimonialState = {
+    loading: true,
     slider: {
         reviews: [],
         title: ''
@@ -18,6 +19,7 @@ export const TestimonialReducer = ( state: TestimonialState = initialState, acti
         case "TESTIMONIAL_SLIDER_LOADED":
             return {
                 ...state,
+                loading: false,
                 slider: action.payload.slider
             }
 
