@@ -1,7 +1,137 @@
-.navbar {
-    height: 64px;
+$breakpoints: (phone: 640px, 
+               tablet: 768px, 
+               desktop: 1024px) !default;
 
-    .navbar-nav a{
+body {
+    background-color: #f9faff;
+    font-family: Roboto;
+}
+
+.navbar {
+    background-color: white !important;
+    box-shadow: "none";
+    height: 64;
+
+    .navbar-brand {
+        display: flex;
+        align-items: center;
+    }
+
+    .nav-item {
+        align-items: center;
         color: #071eb3;
+        display: flex;
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        padding: 0 20px;
+        position: relative;
+
+        &.active::before {
+            background-color: #071eb3;
+            content: "";
+            height: 3px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 100%;
+        }
+
+        &:hover:not(.active) {
+            background-color: #f9faff;
+        }
+    }
+}
+
+.container {
+    display: flex !important;
+
+    .section-title {
+        background-color: #071eb3;
+        color: white;
+        font-weight: 600;
+        max-width: fit-content;
+        padding: 8px 4px;
+    }
+    .carousel-container {
+        flex: 1;
+        flex-direction: column;
+        justify-content: center;
+        margin: 120px 0;
+
+        .carousel {
+            background-color: white;
+            flex: 1;
+            min-height: 254px;
+            margin-top: 80px;
+            max-width: calc(100% - 84px);
+
+            .carousel-item {
+                align-items: stretch;
+                box-sizing: border-box;
+                display: flex;
+                flex-direction: row;
+                height: 254px;
+                padding: 32px;
+
+                .review-name {
+                    font-size: 32px;
+                    font-stretch: normal;
+                    font-weight: bold;
+                    font-style: normal;
+                    height: 48px;
+                    letter-spacing: normal;
+                    line-height: 1.5;
+                }
+
+                .review-position {
+                    height: 16px;
+                    font-size: 14px;
+                    font-stretch: normal;
+                    font-style: normal;
+                    color: #a5a5a5;
+                }
+
+                .review-comment {
+                    font-size: 24px;
+                    font-weight: bold;
+                    font-stretch: normal;
+                    font-style: normal;
+                    line-height: 1.33;
+                    letter-spacing: normal;
+                }
+            }
+        }
+
+        .carousel-controls {
+            bottom: -24px;
+            display: flex;
+            position: absolute;
+            right: 0;
+            z-index: 1;
+
+            .carousel-slides-number {
+                align-items: center;
+                background-color: #071eb3;
+                color: white;
+                display: flex;
+                height: 56px;
+                justify-content: center;
+                letter-spacing: 0.69px;
+                margin-right: 1px;
+                width: 120px;
+            }
+
+            .carousel-control-btn {
+                background-color: #071eb3;
+                border-radius: 0;
+                height: 56px;
+                min-width: 56px;
+
+                span {
+                    margin: 0;
+                }
+            }
+        }
     }
 }

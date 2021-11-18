@@ -1,4 +1,5 @@
-import { FormControl, Grid, Input, InputAdornment, Paper, Slider } from "@mui/material";
+import { Container, FormControl, Grid, Input, InputAdornment, Paper, Slider } from "@mui/material";
+
 import { styled } from '@mui/material/styles'
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux";
@@ -48,7 +49,7 @@ export const CalculatorPage = () => {
     }));
 
     return (
-        <div className="container">
+        <Container maxWidth="lg">
             <Grid container spacing={2}>
                 <Grid item xs={6}>
                     <Item>
@@ -111,7 +112,7 @@ export const CalculatorPage = () => {
                     </div>
                     <div className="row">
                         <div className="col-md-12">
-                            
+
                         </div>
                     </div>
                     <div className="row">
@@ -154,6 +155,6 @@ export const CalculatorPage = () => {
                     </div>
                 </div>
             </div>
-        </div>
+        </Container>
     )
 }
