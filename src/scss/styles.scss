@@ -1,6 +1,50 @@
-$breakpoints: (phone: 640px, 
-               tablet: 768px, 
-               desktop: 1024px) !default;
+$breakpoints: (
+    "extra-small-and-down": (
+        min-width: 600px,
+    ),
+    "only-extra-small": (
+        max-width: 600px,
+    ),
+    "small-and-down": (
+        min-width: 767px,
+    ),
+    "only-small": (
+        max-width: 767px,
+    ),
+    "medium-and-down": (
+        min-width: 992px,
+    ),
+    "only-medium": (
+        max-width: 992px,
+    ),
+    "large-and-down": (
+        min-width: 1200px,
+    ),
+    "only-large": (
+        man-width: 1200px,
+    ),
+) !default;
+
+/// Mixin to manage responsive breakpoints
+/// @author Kitty Giraudel
+/// @param {String} $breakpoint - Breakpoint name
+/// @require $breakpoints
+
+@mixin respond-to($breakpoint) {
+    // If the key exists in the map
+    @if map-has-key($breakpoints, $breakpoint) {
+        // Prints a media query based on the value
+        @media #{inspect(map-get($breakpoints, $breakpoint))} {
+            @content;
+        }
+    }
+
+    // If the key doesn't exist in the map
+    @else {
+        @warn "Unfortunately, no value could be retrieved from `#{$breakpoint}`. "
+          + "Available breakpoints are: #{map-keys($breakpoints)}.";
+    }
+}
 
 body {
     background-color: #f9faff;
@@ -64,7 +108,12 @@ body {
             flex: 1;
             min-height: 254px;
             margin-top: 80px;
-            max-width: calc(100% - 84px);
+            @include respond-to("only-extra-small") {
+                min-height: 460px;
+            }
+            @include respond-to("medium-and-down") {
+                max-width: calc(100% - 84px);
+            }
 
             .carousel-item {
                 align-items: stretch;
@@ -107,8 +156,13 @@ body {
             bottom: -24px;
             display: flex;
             position: absolute;
-            right: 0;
             z-index: 1;
+            @include respond-to("only-extra-small") {
+                left: calc(50% - 116.5px);
+            }
+            @include respond-to("extra-small-and-down") {
+                right: 0;
+            }
 
             .carousel-slides-number {
                 align-items: center;

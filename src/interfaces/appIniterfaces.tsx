@@ -36,6 +36,7 @@ export interface Slider {
 }
 
 export interface TestimonialState {
+    loading: boolean;
     slider: Slider;
 }
 
