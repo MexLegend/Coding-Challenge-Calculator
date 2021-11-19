@@ -1,134 +1,184 @@
-import { Container, Grid, Paper, Slider } from "@mui/material";
-
-import { styled } from '@mui/material/styles'
+import { Box, Container, FormControl, Grid, Slider, Typography } from "@mui/material";
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux";
 
+import { Loading } from "../../components/Loading";
 import { AppState } from "../../interfaces/appIniterfaces";
-import { calculateAnnualSavings, calculateCostFoodSavings, infoStartLoading } from "../../redux/actions/calculatorAction";
+import { calculateAnnualSavings, calculateCostFoodSavings, fullTimeEmployesValue, infoStartLoading, monthlyIngredientSpendingValue } from "../../redux/actions/calculatorAction";
+
+import { DebounceInput } from 'react-debounce-input'
 
 export const CalculatorPage = () => {
 
     const dispatch = useDispatch();
-    const { annualSavingsValue, calculator, costFoodSavingsValue } = useSelector(({ CALCULATOR }: AppState) => CALCULATOR);
+    const { annualSavingsValue, calculator, costFoodSavingsValue, fullTimeEmployes, loading, monthlyIngredientSpending } = useSelector(({ CALCULATOR }: AppState) => CALCULATOR);
 
     const onCalculateAnnualSavings = (fullTimeEmployes: number) => {
         dispatch(calculateAnnualSavings(fullTimeEmployes, costFoodSavingsValue));
     }
 
     const onCalculateCostFoodSavings = (monthlyIngredientSpending: number) => {
-        console.log(monthlyIngredientSpending);
+        dispatch(calculateCostFoodSavings(monthlyIngredientSpending));
+        onCalculateAnnualSavings(fullTimeEmployes);
+    }
 
-        dispatch(calculateCostFoodSavings(monthlyIngredientSpending))
+    const onChangeMonthlyIngredientSpending = ({ value }: EventTarget & (HTMLTextAreaElement | HTMLInputElement)) => {
+        const valueNumber = handleMinMax(100, 10, value);
+        dispatch(monthlyIngredientSpendingValue(valueNumber));
+        dispatch(calculateCostFoodSavings(valueNumber));
+        onCalculateAnnualSavings(fullTimeEmployes);
+    }
+
+    const onChangeFullTimeEmployes = ({ value }: EventTarget & (HTMLTextAreaElement | HTMLInputElement)) => {
+        const valueNumber = handleMinMax(10, 1, value);
+        dispatch(fullTimeEmployesValue(valueNumber));
+        dispatch(calculateAnnualSavings(valueNumber, costFoodSavingsValue));
+    };
+
+    const handleMinMax = (max: number, min: number, value: string) => {
+        let numberValue = Number(value);
+        if (Number.isNaN(numberValue)) {
+            numberValue = min;
+        }
+
+        if (numberValue < min) {
+            numberValue = min;
+        }
+
+        if (numberValue > max) {
+            numberValue = max;
+        }
+
+        return numberValue;
     }
 
     useEffect(() => {
         dispatch(infoStartLoading());
     }, [dispatch]);
 
-
-
-    const Item = styled(Paper)(({ theme }) => ({
-        ...theme.typography.body2,
-        padding: theme.spacing(1),
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-        boxShadow: 'none'
-    }));
+    if (loading) return <Loading text="calculator" />
 
     return (
-        <Container maxWidth="lg">
-            <Grid container spacing={2}>
-                <Grid item xs={6}>
-                    <Item>
-                        <span>{calculator.title}</span>
-                        <span>{calculator.description}</span>
-                    </Item>
-                </Grid>
-                <Grid container>
-                    <Grid item xs={8}>
-                        <Item>
-                            <span>
-                                Monthly
-                                ingredient spending
-                            </span>
-                        </Item>
-                    </Grid>
-                    <Grid item xs={4}>
-                        <Item>
-                            <div className="input-group">
-                                <span className="input-group-text">$</span>
-                                <input type="text" className="form-control" aria-label="Dollar amount (with dot and two decimal places)" onChange={(e) => onCalculateCostFoodSavings(Number(e.target.value))} value={costFoodSavingsValue} />
-                            </div>
-                        </Item>
-                    </Grid>
+        // Container
+        <Container className="calculator container" maxWidth="lg">
+            {/* Wrapper Container */}
+            <Grid className="wrapper-container calculator-wrapper" container order={{ xs: 1, sm: 1 }}>
+                {/* Information Container */}
+                <Grid item container xs={12} sm={5} md={4} lg={4} xl={4} >
+                    <span> <Typography className="section-title calculator-title" component="span" variant="h4">
+                        {calculator.title}
+                    </Typography></span>
+                    <Typography className="calculator-description" component="p">
+                        {calculator.description}
+                    </Typography>
                 </Grid>
 
-                <Grid container>
-                    <Grid item xs={12}>
-                        <Item>
-                        </Item>
-                    </Grid>
+                {/* Spacer Container */}
+                <Grid item container xs={0} sm={1} md={2} lg={2} xl={2} >
                 </Grid>
-            </Grid>
-            <Slider
-                onChange={(_, value) => onCalculateCostFoodSavings(value as number)}
-                aria-label="Monthly"
-                defaultValue={10}
-                valueLabelDisplay="auto"
-                step={1}
-                min={10}
-                max={100}
-            />
-            <div className="row">
-                <div className="col-md-6">
-                </div>
-                <div className="col-md-6">
-                    <div className="row">
-                        <div className="col-md-8">
-                        </div>
-                        <div className="col-md-4">
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-md-12">
 
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-md-10">
-                            <span>
-                                Full-time employees that
-                                process invoices
-                            </span>
-                        </div>
-                        <div className="col-md-2">
-                            <input type="text" className="form-control" />
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-md-12">
+                {/* Calculator Container */}
+                <Grid item className="calculator-container" container xs={12} sm={6} md={6} lg={6} xl={6}>
+                    {/* Main Monthly Ingredient Spending Container */}
+                    <Grid className="" container style={{ paddingTop: 4, paddingBottom: 4 }}>
+                        {/* Monthly Ingredient Text and Input Container */}
+                        <Grid className="calculator-input-container" container item>
+                            <Grid item xs={8}>
+                                <Box style={{ width: '126px' }}>
+                                    <span className="calculator-title">
+                                        Monthly ingredient spending
+                                    </span>
+                                </Box>
+                            </Grid>
+                            <Grid item container xs={4}>
+                                <FormControl className="calculator-formcontrol" fullWidth sx={{ m: 1 }} variant="standard">
+                                    <DebounceInput
+                                        className="calculator-input"
+                                        min={10}
+                                        max={100}
+                                        onChange={({ target }) => onChangeMonthlyIngredientSpending(target)}
+                                        value={monthlyIngredientSpending}
+                                        type="number"
+                                    />
+                                </FormControl>
+                            </Grid>
+                        </Grid>
+                        {/* Monthly Ingredient Range Container */}
+                        <Grid container item >
                             <Slider
-                                onChange={(_, value) => onCalculateAnnualSavings(value as number)}
-                                aria-label="Full-time"
-                                defaultValue={1}
-                                valueLabelDisplay="auto"
+                                aria-label="Monthly"
+                                max={100}
+                                min={10}
+                                onChange={(_, value) => onCalculateCostFoodSavings(value as number)}
                                 step={1}
-                                min={1}
-                                max={10}
+                                value={monthlyIngredientSpending}
+                                valueLabelDisplay="auto"
                             />
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-md-4">
-                            ${costFoodSavingsValue}
-                        </div>
-                        <div className="col-md-8">
-                            ${annualSavingsValue}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </Container>
+                        </Grid>
+                    </Grid>
+
+                    {/* Main Full Time Employes Container */}
+                    <Grid className="" container style={{ paddingTop: 4, paddingBottom: 4 }}>
+                        {/* Full Time Employes Text and Input Container */}
+                        <Grid className="calculator-input-container" container item>
+                            <Grid item xs={8}>
+                                <Box style={{ width: '157px' }}>
+                                    <span className="calculator-title">
+                                        Full-time employees that
+                                        process invoices
+                                    </span>
+                                </Box>
+                            </Grid>
+                            <Grid item container xs={4}>
+                                <FormControl className="calculator-formcontrol" fullWidth sx={{ m: 1 }} variant="standard">
+                                    <DebounceInput
+                                        className="calculator-input employes-input"
+                                        max={10}
+                                        min={1}
+                                        onChange={({ target }) => onChangeFullTimeEmployes(target)}
+                                        type="number"
+                                        value={fullTimeEmployes}
+                                    />
+                                </FormControl>
+                            </Grid>
+                        </Grid>
+                        {/* Full Time Employes Range Container */}
+                        <Grid container item >
+                            <Slider
+                                aria-label="Full-time"
+                                max={10}
+                                min={1}
+                                onChange={(_, value) => onCalculateAnnualSavings(value as number)}
+                                step={1}
+                                value={fullTimeEmployes}
+                                valueLabelDisplay="auto"
+                            />
+                        </Grid>
+                    </Grid>
+                </Grid>
+
+            </Grid>
+            <Grid className="calculator-results" container order={{ xs: 2, sm: 2 }}>
+                <Box>
+                    <Typography component="h2" variant="h2">
+                        <span className="result-adornment">$</span>{costFoodSavingsValue.toFixed(3)}
+                    </Typography>
+                    <Typography component="p">
+                        Estimated cost food savings
+                    </Typography>
+                </Box>
+
+                <Box>
+                    <Typography component="h2" variant="h2">
+                        <span className="result-adornment">$</span>{annualSavingsValue.toFixed(3)}
+                    </Typography>
+                    <Typography component="p">
+                        Your estimated annual savings
+                    </Typography>
+                </Box>
+
+            </Grid>
+
+        </Container >
     )
 }

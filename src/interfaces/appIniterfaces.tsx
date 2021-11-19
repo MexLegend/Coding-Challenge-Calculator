@@ -13,6 +13,9 @@ export interface CalculatorState {
     annualSavingsValue: number;
     calculator: CalculatorInfo;
     costFoodSavingsValue: number;
+    fullTimeEmployes: number;
+    loading: boolean;
+    monthlyIngredientSpending: number;
 }
 
 export interface MenuItem {
@@ -31,8 +34,8 @@ export interface Review {
 }
 
 export interface Slider {
-    title: string;
     reviews: Review[];
+    title: string;
 }
 
 export interface TestimonialState {
