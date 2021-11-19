@@ -9,13 +9,14 @@ type CalculatorAction =
     | { type: Types.CALCULATOR_MONTHLY_INGREDIENT_SPENDING, payload: number }
 
 const initialState: CalculatorState = {
-    annualSavingsValue: 0,
+    annualSavingsValue: 1340,
     calculator: {
         description: '',
         title: ''
     },
-    costFoodSavingsValue: 0,
+    costFoodSavingsValue: 3,
     fullTimeEmployes: 1,
+    loading: true,
     monthlyIngredientSpending: 10
 }
 
@@ -44,7 +45,8 @@ export const CalculatorReducer = (state: CalculatorState = initialState, action:
         case "CALCULATOR_INFO_LOADED":
             return {
                 ...state,
-                calculator: action.payload.calculator
+                calculator: action.payload.calculator,
+                loading: false
             }
         
         case "CALCULATOR_MONTHLY_INGREDIENT_SPENDING":

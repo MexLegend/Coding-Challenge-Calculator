@@ -1,3 +1,5 @@
+@import "./settings";
+
 $breakpoints: (
     "extra-small-and-down": (
         min-width: 600px,
@@ -63,7 +65,7 @@ body {
 
     .nav-item {
         align-items: center;
-        color: #071eb3;
+        color: $primary;
         display: flex;
         font-size: 14px;
         font-weight: 600;
@@ -71,8 +73,19 @@ body {
         padding: 0 20px;
         position: relative;
 
+        @include respond-to("only-small") {
+            padding: 0 10px;
+        }
+
+        @include respond-to("only-extra-small") {
+            &:nth-child(3),
+            &:nth-child(4) {
+                display: none;
+            }
+        }
+
         &.active::before {
-            background-color: #071eb3;
+            background-color: $primary;
             content: "";
             height: 3px;
             left: 0;
@@ -91,101 +104,257 @@ body {
     display: flex !important;
 
     .section-title {
-        background-color: #071eb3;
+        background-color: $primary;
+        -webkit-box-decoration-break: clone;
+        box-decoration-break: clone;
         color: white;
         font-weight: 600;
         max-width: fit-content;
         padding: 8px 4px;
+
+        &.calculator-title {
+            line-height: 1.8;
+        }
     }
-    .carousel-container {
+    .wrapper-container {
         flex: 1;
-        flex-direction: column;
         justify-content: center;
         margin: 120px 0;
 
-        .carousel {
-            background-color: white;
-            flex: 1;
-            min-height: 254px;
-            margin-top: 80px;
-            @include respond-to("only-extra-small") {
-                min-height: 460px;
-            }
-            @include respond-to("medium-and-down") {
-                max-width: calc(100% - 84px);
-            }
+        &.calculator-wrapper {
+            margin-bottom: 24px;
+        }
+    }
+}
 
-            .carousel-item {
-                align-items: stretch;
-                box-sizing: border-box;
-                display: flex;
-                flex-direction: row;
-                height: 254px;
-                padding: 32px;
+.carousel {
+    background-color: white;
+    flex: 1;
+    margin-top: 80px;
+    min-height: 254px;
+    @include respond-to("only-extra-small") {
+        min-height: 460px;
+    }
+    @include respond-to("medium-and-down") {
+        max-width: calc(100% - 84px);
+    }
 
-                .review-name {
-                    font-size: 32px;
-                    font-stretch: normal;
-                    font-weight: bold;
-                    font-style: normal;
-                    height: 48px;
-                    letter-spacing: normal;
-                    line-height: 1.5;
-                }
+    .carousel-item {
+        align-items: stretch;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: row;
+        height: 254px;
+        padding: 32px;
 
-                .review-position {
-                    height: 16px;
-                    font-size: 14px;
-                    font-stretch: normal;
-                    font-style: normal;
-                    color: #a5a5a5;
-                }
-
-                .review-comment {
-                    font-size: 24px;
-                    font-weight: bold;
-                    font-stretch: normal;
-                    font-style: normal;
-                    line-height: 1.33;
-                    letter-spacing: normal;
-                }
-            }
+        .review-name {
+            font-size: 32px;
+            font-stretch: normal;
+            font-style: normal;
+            font-weight: bold;
+            height: 48px;
+            letter-spacing: normal;
+            line-height: 1.5;
         }
 
-        .carousel-controls {
-            bottom: -24px;
-            display: flex;
-            position: absolute;
-            z-index: 1;
-            @include respond-to("only-extra-small") {
-                left: calc(50% - 116.5px);
-            }
-            @include respond-to("extra-small-and-down") {
-                right: 0;
-            }
+        .review-position {
+            color: #a5a5a5;
+            font-size: 14px;
+            font-stretch: normal;
+            font-style: normal;
+            height: 16px;
+        }
 
-            .carousel-slides-number {
-                align-items: center;
-                background-color: #071eb3;
-                color: white;
-                display: flex;
-                height: 56px;
+        .review-comment {
+            font-size: 24px;
+            font-stretch: normal;
+            font-style: normal;
+            font-weight: bold;
+            letter-spacing: normal;
+            line-height: 1.33;
+        }
+    }
+}
+
+.carousel-controls {
+    bottom: -24px;
+    display: flex;
+    position: absolute;
+    z-index: 1;
+    @include respond-to("only-extra-small") {
+        left: calc(50% - 116.5px);
+    }
+    @include respond-to("extra-small-and-down") {
+        right: 0;
+    }
+
+    .carousel-slides-number {
+        align-items: center;
+        background-color: $primary;
+        color: white;
+        display: flex;
+        height: 56px;
+        justify-content: center;
+        letter-spacing: 0.69px;
+        margin-right: 1px;
+        width: 120px;
+    }
+
+    .carousel-control-btn {
+        background-color: $primary;
+        border-radius: 0;
+        height: 56px;
+        min-width: 56px;
+
+        span {
+            margin: 0;
+        }
+    }
+}
+
+.calculator {
+    flex-direction: column;
+
+    .calculator-description {
+        color: #000;
+        font-size: 16px;
+        height: 120px;
+        letter-spacing: 0;
+        line-height: 24px;
+        margin-top: 32px;
+        max-width: 349px;
+    }
+
+    .calculator-container {
+        align-items: center;
+        justify-content: center;
+        @include respond-to("only-extra-small") {
+            margin-top: 30px;
+        }
+
+        .calculator-input-container {
+            margin-bottom: 9px;
+
+            .calculator-formcontrol {
+                align-items: flex-end;
                 justify-content: center;
-                letter-spacing: 0.69px;
-                margin-right: 1px;
-                width: 120px;
-            }
+                margin: 0;
 
-            .carousel-control-btn {
-                background-color: #071eb3;
-                border-radius: 0;
-                height: 56px;
-                min-width: 56px;
+                .calculator-input {
+                    width: 190px;
+                    height: 52px;
+                    padding: 6px 12px;
+                    background-color: #fff;
+                    border-radius: 4px;
+                    border: solid 1px #d6dcff;
+                    box-sizing: border-box;
+                    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell,
+                        "Open Sans", "Helvetica Neue", sans-serif;
+                    font-size: 36px;
+                    font-weight: 500;
+                    line-height: 1.11;
+                    letter-spacing: 0.77px;
+                    text-align: right;
 
-                span {
-                    margin: 0;
+                    .input-adornment p {
+                        width: 15px;
+                        height: 40px;
+                        opacity: 0.24;
+                        font-size: 24px;
+                        font-weight: 500;
+                        line-height: 1.67;
+                        letter-spacing: 0.51px;
+                    }
+
+                    .css-1x51dt5-MuiInputBase-input-MuiInput-input {
+                        text-align: right;
+                    }
+
+                    &.employes-input {
+                        width: 67px;
+                    }
+
+                    &:focus {
+                        outline: none;
+                    }
+
+                    &::-webkit-outer-spin-button,
+                    &::-webkit-inner-spin-button {
+                        -webkit-appearance: none;
+                        margin: 0;
+                    }
                 }
             }
+
+            .calculator-title {
+                font-size: 14px;
+                font-weight: bold;
+                height: 32px;
+            }
         }
+    }
+
+    .calculator-results {
+        justify-content: flex-end;
+
+        div.MuiBox-root:first-child {
+            @include respond-to("small-and-down") {
+                margin-right: 56px;
+            }
+        }
+
+        h2 {
+            color: $primary;
+            min-width: 188px;
+            width: fit-content;
+            height: 72px;
+            margin: 0 0 8px 8px;
+            font-size: 72px;
+            font-weight: 500;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: 1;
+            letter-spacing: 1px;
+            text-align: right;
+        }
+
+        p {
+            height: 16px;
+            margin: 8px 0 0 17px;
+            font-size: 14px;
+            font-weight: bold;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: normal;
+            color: black;
+            text-align: right;
+        }
+
+        .result-adornment {
+            width: 22px;
+            height: 40px;
+            font-size: 36px;
+            font-weight: 500;
+            line-height: 1.11;
+            letter-spacing: 0.77px;
+            margin-right: 8px;
+        }
+    }
+}
+
+.MuiSlider-colorPrimary {
+    .MuiSlider-thumbColorPrimary {
+        background-color: white;
+        border: 7px solid $primary;
+    }
+
+    .MuiSlider-rail,
+    .MuiSlider-track {
+        background-color: $primary;
+    }
+
+    .MuiSlider-rail {
+        opacity: 0.08;
     }
 }
