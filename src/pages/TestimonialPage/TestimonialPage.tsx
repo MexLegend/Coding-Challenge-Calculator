@@ -56,7 +56,7 @@ export const TestimonialPage = () => {
         )
     }
 
-    if( true ) return <Loading text="testimonials" />
+    if( loading ) return <Loading text="testimonials" />
 
     return (
         <Container className="container" maxWidth="lg">
