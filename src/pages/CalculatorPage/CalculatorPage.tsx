@@ -96,6 +96,7 @@ export const CalculatorPage = () => {
                                         className="calculator-input"
                                         min={10}
                                         max={100}
+                                        onKeyUpCapture={({ target }: any) => onChangeMonthlyIngredientSpending(target)}
                                         onChange={({ target }) => onChangeMonthlyIngredientSpending(target)}
                                         value={monthlyIngredientSpending}
                                         type="number"
